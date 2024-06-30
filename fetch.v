@@ -47,9 +47,19 @@ else pc_to_instrmem <= mux_to_pc;
 end
 
 //Memory for Instruction
+ /*initial begin
+    //mem[0] = 32'hFFC4A303;
+    //mem[1] = 32'h00832383;
+    // mem[0] = 32'h0064A423;
+     //mem[1] = 32'h00B6;
+    //mem[0] = 32'h0062;
+    // mem[1] = 32'h00B62423;
+
+ end
+*/
 //output is instrd and input is pc_to_instrmem
 reg [15:0]mem[1023:0];
-assign instr_f = (!rst) ? {32{1'b0}}:mem[pc_to_instrmem[15:1]]; //accessign memory for instr
+assign instr_f = (rst) ? {32{1'b0}}:mem[pc_to_instrmem[15:1]]; //accessign memory for instr
 
 //PC Adder
 assign pc_next_f = pc_to_instrmem + 16'h0002; //normal operation no branching
@@ -57,7 +67,7 @@ assign pc_next_f = pc_to_instrmem + 16'h0002; //normal operation no branching
 //Fetch cycle register update 
 //The inputs and outputs to the register are assumed to be nets
 always@(posedge clk or negedge rst)begin
-if(rst==1'b0)begin    //resets all the registers to 0 in case of reset 
+if(rst==1'b1)begin    //resets all the registers to 0 in case of reset 
 instr_reg_f <= 16'h0000;
 pc_to_instrmem_reg_f <= 16'h0000;
 pc_next_reg_f <= 16'h0000;
